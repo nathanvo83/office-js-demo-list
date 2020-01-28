@@ -1,0 +1,56 @@
+import { ChunkNodeMO } from "./ChunkNodeMO";
+import { ChunkDataMO } from "./ChunkDataMO";
+
+export class ChunkListMO {
+  public head: ChunkNodeMO;
+
+  constructor() {
+    this.head = null;
+  }
+
+  addFirst(chunkDataMO: ChunkDataMO) {
+    this.head = new ChunkNodeMO(0, chunkDataMO, this.head);
+  }
+
+  addLast(chunkDataMO: ChunkDataMO) {
+    if (this.head === null) {
+      this.addFirst(chunkDataMO);
+    } else {
+      let temp: ChunkNodeMO = this.head;
+      while (temp.next !== null) {
+        temp = temp.next;
+      }
+
+      temp.next = new ChunkNodeMO(temp.index + 1, chunkDataMO);
+    }
+  }
+
+  updateChunkAtIndex(index: number, chunkDataMO: ChunkDataMO) {
+    let temp: ChunkNodeMO = this.head;
+
+    while (temp !== null && index <= temp.index) {
+      if (temp.index === index) {
+        temp.data = chunkDataMO;
+        break;
+      }
+
+      temp = temp.next;
+    }
+  }
+
+  getChunkAtIndex(index: number) {
+    let temp: ChunkNodeMO = this.head;
+
+    while (temp !== null && index <= temp.index) {
+      if (temp.index === index) {
+        return temp;
+      }
+
+      temp = temp.next;
+    }
+
+    return null;
+  }
+
+  // clone() {}
+}
