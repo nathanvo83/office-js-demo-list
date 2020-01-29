@@ -215,8 +215,10 @@ export class Analysis {
 
     while (temp !== null && i <= to) {
       if (i >= from && i <= to) {
-        temp.data.wordTypeCount = this.calculatorWord(temp.data.content);
+        let wtc: WordTypeCountMO = this.calculatorWord(temp.data.content);
+        temp.data.wordTypeCount = wtc;
         temp.isUpdated = true;
+        chunkListMO.wordTypeCount.append(wtc);
       }
 
       temp = temp.next;

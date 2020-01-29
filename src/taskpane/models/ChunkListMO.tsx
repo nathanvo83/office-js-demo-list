@@ -1,13 +1,16 @@
 import { ChunkNodeMO } from "./ChunkNodeMO";
 import { ChunkDataMO } from "./ChunkDataMO";
+import { WordTypeCountMO } from "./WordTypeCountMO";
 
 export class ChunkListMO {
   public head: ChunkNodeMO;
   public length: number;
+  public wordTypeCount: WordTypeCountMO;
 
   constructor() {
     this.head = null;
     this.length = 0;
+    this.wordTypeCount = new WordTypeCountMO();
   }
 
   addFirst(chunkDataMO: ChunkDataMO) {

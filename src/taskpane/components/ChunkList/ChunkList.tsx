@@ -5,14 +5,8 @@ import { ChunkListMO } from "../../models/ChunkListMO";
 import Chunk from "../Chunk/Chunk";
 import { ChunkDetailsMO } from "../../models/ChunkDetailsMO";
 import { ChunkDataMO } from "../../models/ChunkDataMO";
-// import { Timer } from "../../Utils/Timer";
-// import { Analysis } from "../Analysis/Analysis";
 
 export interface AppProps {
-  // list: ChunkListMO;
-
-  // analysis: Analysis;
-
   chunkDetailsMO: ChunkDetailsMO;
   setChunkDetailsMO;
   chunkListMO: ChunkListMO;

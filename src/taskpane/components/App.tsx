@@ -25,6 +25,7 @@ export interface AppProps {
 
 export interface AppState {
   isLoad: boolean;
+  statusInfo: string;
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -41,14 +42,14 @@ class App extends React.Component<AppProps, AppState> {
 
   componentDidMount() {
     this.setState({
-      isLoad: false
+      isLoad: false,
+      statusInfo: "(0/0)"
     });
 
     this.subcribeToEvent();
   }
 
   componentDidUpdate() {
-    console.log("--- app componentDidUpdate");
     const { chunkDetailsMO } = this.props;
 
     if (this.chunkDetailsContentChange === true && chunkDetailsMO.isShow === false) {
@@ -145,17 +146,17 @@ class App extends React.Component<AppProps, AppState> {
     let x = 10;
 
     let max = Math.ceil(chunkListMO.length / x);
+    chunkListMO.wordTypeCount.reset();
 
     for (let i = 0; i < max; i++) {
-      await Timer.sleep(100);
+      await Timer.sleep(120);
       this.analysis.calculator(chunkListMO, i * x, (i + 1) * x);
       setChunkListMO(chunkListMO);
+      this.setState({ statusInfo: `(${(i + 1) * x}/${chunkListMO.length})` });
     }
   };
 
   lastKeyPressChecking = async () => {
-    console.log("--- app last key press checking");
-
     let len1: number;
     let len2: number;
 
@@ -196,8 +197,16 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   renderMaster() {
-    //
-    return <ChunkList analysis={this.analysis}></ChunkList>;
+    const { chunkListMO } = this.props;
+    return (
+      <div>
+        <div>noun: {chunkListMO.wordTypeCount.noun}</div>
+        <div>verb: {chunkListMO.wordTypeCount.verb}</div>
+        <div>prep: {chunkListMO.wordTypeCount.prep}</div>
+        <div>waste: {chunkListMO.wordTypeCount.waste}</div>
+        <ChunkList></ChunkList>
+      </div>
+    );
   }
 
   renderDetails() {
@@ -228,7 +237,7 @@ class App extends React.Component<AppProps, AppState> {
 
     return (
       <div className="ms-welcome">
-        {this.state.isLoad === false ? "completed" : "loading"}
+        {this.state.isLoad === false ? "completed" : "loading"} - {this.state.statusInfo}
         <br />
         <Button
           className="ms-welcome__action"

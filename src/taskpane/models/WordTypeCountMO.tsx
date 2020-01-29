@@ -10,4 +10,18 @@ export class WordTypeCountMO {
     this.verb = verb;
     this.waste = waste;
   }
+
+  public append(wtc: WordTypeCountMO) {
+    this.noun += wtc.noun;
+    this.prep += wtc.prep;
+    this.verb += wtc.verb;
+    this.waste += wtc.waste;
+  }
+
+  public reset() {
+    this.noun = 0;
+    this.prep = 0;
+    this.verb = 0;
+    this.waste = 0;
+  }
 }
