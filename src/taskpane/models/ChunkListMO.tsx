@@ -3,9 +3,11 @@ import { ChunkDataMO } from "./ChunkDataMO";
 
 export class ChunkListMO {
   public head: ChunkNodeMO;
+  public length: number;
 
   constructor() {
     this.head = null;
+    this.length = 0;
   }
 
   addFirst(chunkDataMO: ChunkDataMO) {
@@ -41,7 +43,7 @@ export class ChunkListMO {
   getChunkAtIndex(index: number) {
     let temp: ChunkNodeMO = this.head;
 
-    while (temp !== null && index <= temp.index) {
+    while (temp !== null) {
       if (temp.index === index) {
         return temp;
       }

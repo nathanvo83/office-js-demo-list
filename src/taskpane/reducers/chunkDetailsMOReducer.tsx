@@ -2,12 +2,13 @@ import { types } from "../constants/types";
 import { ChunkDetailsMO } from "../models/ChunkDetailsMO";
 
 export const chunkDetailsMOReducer = (state = new ChunkDetailsMO(), action) => {
-  console.log("====>>> update chunkDetailsMO");
+  console.log("====>>> update chunkDetailsMO:", action.chunkDetailsMO);
   switch (action.type) {
-    case types.SET_CHUNK:
+    case types.SET_CHUNK_DETAILS:
       return {
         ...state,
-        chunkDetailsMO: action.chunkDetailsMO
+        ...action.chunkDetailsMO
+        // chunkDetailsMO: action.chunkDetailsMO
       };
 
     default:

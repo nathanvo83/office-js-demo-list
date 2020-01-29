@@ -5,10 +5,12 @@ import { WordTypeCountMO } from "../../models/WordTypeCountMO";
 
 export class Analysis {
   // private chunkListMO: ChunkListMO;
+  private previousLength: number;
 
   constructor() {
-    //da a
+    // do a
     // this.chunkListMO = new ChunkListMO();
+    this.previousLength = 0;
   }
 
   private createChunkDataMO(content: string) {
@@ -22,8 +24,30 @@ export class Analysis {
   }
 
   private getChunkTitle(content: string) {
-    let end = content.indexOf(" ", 30) === -1 ? content.length : content.indexOf(" ", 30);
-    return content.substring(0, end);
+    let temp = content.trim();
+    let x = temp.indexOf("\r", 0);
+    console.log("---x:", x);
+    let paragraph = temp.substring(0, x);
+
+    // console.log("---content:", content);
+    // let x = content.indexOf("\r", 0);
+
+    // let temp = content.trim().substring(0, x);
+
+    // console.log("---temp:", temp);
+
+    let end = paragraph.indexOf(" ", 30) === -1 ? paragraph.length : paragraph.indexOf(" ", 30);
+    return paragraph.substring(0, end) + " ...";
+  }
+
+  isTextChange(text: string) {
+    if (text.length !== this.previousLength) {
+      console.log("text change");
+      this.previousLength = text.length;
+      return true;
+    }
+    console.log("text does not change");
+    return false;
   }
 
   // private calculatorVerb(data: string) {
@@ -154,29 +178,29 @@ export class Analysis {
         });
 
         // adj
-        // wordData.adjTokenRegex.forEach(prep => {
-        //   if (term.endsWith(prep) === true) {
-        //     _prep += 1;
-        //   }
-        // });
+        wordData.adjTokenRegex.forEach(prep => {
+          if (term.endsWith(prep) === true) {
+            _prep += 1;
+          }
+        });
 
-        // wordData.adjectiveAdverbExceptionMatch.forEach(prep => {
-        //   if (term === prep) {
-        //     _prep += 1;
-        //   }
-        // });
-        // wordData.prepositionTokenMatch.forEach(prep => {
-        //   if (term === prep) {
-        //     _prep += 1;
-        //   }
-        // });
+        wordData.adjectiveAdverbExceptionMatch.forEach(prep => {
+          if (term === prep) {
+            _prep += 1;
+          }
+        });
+        wordData.prepositionTokenMatch.forEach(prep => {
+          if (term === prep) {
+            _prep += 1;
+          }
+        });
 
-        // // waste
-        // wordData.wasteWordTokenMatch.forEach(waste => {
-        //   if (term === waste) {
-        //     _waste += 1;
-        //   }
-        // });
+        // waste
+        wordData.wasteWordTokenMatch.forEach(waste => {
+          if (term === waste) {
+            _waste += 1;
+          }
+        });
       });
     }
 
@@ -185,47 +209,57 @@ export class Analysis {
     return wtc;
   }
 
-  private calculator(chunkListMO: ChunkListMO) {
+  public calculator(chunkListMO: ChunkListMO, from: number, to: number) {
     let temp = chunkListMO.head;
+    let i: number = 0;
 
-    while (temp !== null) {
-      setTimeout(temp => {
+    while (temp !== null && i <= to) {
+      if (i >= from && i <= to) {
         temp.data.wordTypeCount = this.calculatorWord(temp.data.content);
-      }, 100);
+        temp.isUpdated = true;
+      }
 
       temp = temp.next;
+      i++;
     }
   }
 
-  private split(doc: string) {
+  public split(doc: string) {
     let chunkListMO: ChunkListMO = new ChunkListMO();
     let start: number = 0;
+    let length: number = 0;
 
     for (let i = 0; i < doc.length; i++) {
       if (doc[i] === "\r" && i - start >= 5000) {
-        let content = doc.substring(start, i - 1);
+        let content = doc.substring(start, i);
         chunkListMO.addLast(this.createChunkDataMO(content));
         //
-        start = i;
+        start = i + 1;
+        length++;
       }
     }
 
     if (start < doc.length - 1) {
-      let content = doc.substring(start, doc.length - 1);
+      let content = doc.substring(start);
       chunkListMO.addLast(this.createChunkDataMO(content));
+      length++;
     }
+
+    chunkListMO.length = length;
+
+    console.log("analysis chunkListMO: ", chunkListMO);
 
     return chunkListMO;
   }
 
-  public process(doc: string) {
-    let result = this.split(doc);
+  // public process(doc: string) {
+  //   let result = this.split(doc);
 
-    // do somthing => count word type...
-    this.calculator(result);
+  //   // do somthing => count word type...
+  //   // this.calculator(result, 1, 3);
 
-    return result;
-  }
+  //   return result;
+  // }
 
   public test(msg: string) {
     console.log(msg);

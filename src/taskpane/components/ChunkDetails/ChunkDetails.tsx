@@ -35,13 +35,13 @@ class ChunkDetails extends React.Component<AppProps, AppState> {
 
     for (let i = 0; i < content.length; i++) {
       if (content[i] === "\r") {
-        listItems.push(<div>{content.substring(start, i - 1)}</div>);
-        start = i;
+        listItems.push(<div>{content.substring(start, i)}</div>);
+        start = i + 1;
       }
     }
 
     if (start < content.length - 1) {
-      listItems.push(<div>{content.substring(start, content.length - 1)}</div>);
+      listItems.push(<div>{content.substring(start + 1)}</div>);
     }
 
     return listItems;
@@ -63,7 +63,7 @@ class ChunkDetails extends React.Component<AppProps, AppState> {
 const mapDispatchToProps = dispatch => ({
   setChunkDetailsMO: chunkDetailsMO => {
     dispatch({
-      type: types.SET_CHUNK,
+      type: types.SET_CHUNK_DETAILS,
       chunkDetailsMO: chunkDetailsMO
     });
   }

@@ -5,11 +5,18 @@ import { ChunkListMO } from "../../models/ChunkListMO";
 import Chunk from "../Chunk/Chunk";
 import { ChunkDetailsMO } from "../../models/ChunkDetailsMO";
 import { ChunkDataMO } from "../../models/ChunkDataMO";
+// import { Timer } from "../../Utils/Timer";
+// import { Analysis } from "../Analysis/Analysis";
 
 export interface AppProps {
-  list: ChunkListMO;
+  // list: ChunkListMO;
+
+  // analysis: Analysis;
+
   chunkDetailsMO: ChunkDetailsMO;
   setChunkDetailsMO;
+  chunkListMO: ChunkListMO;
+  // setChunkListMO;
 }
 
 export interface AppState {
@@ -24,8 +31,19 @@ class ChunkList extends React.Component<AppProps, AppState> {
     //
   }
 
+  moveCursor = (content: string) => {
+    let temp = content.trim().substr(0, 255);
+
+    Word.run(async context => {
+      var searchResults = context.document.body.search(temp, { matchPrefix: true }).getFirst();
+
+      searchResults.select("Start");
+      await context.sync();
+    });
+  };
+
   chunkHandler = (index: number, chunkDataMO: ChunkDataMO) => {
-    console.log("==> chunk item list - ", index, chunkDataMO);
+    this.moveCursor(chunkDataMO.content);
 
     const { setChunkDetailsMO, chunkDetailsMO } = this.props;
     chunkDetailsMO.isShow = true;
@@ -38,12 +56,12 @@ class ChunkList extends React.Component<AppProps, AppState> {
   renderChunk() {
     let listItems: JSX.Element[] = [];
 
-    let temp = this.props.list.head;
+    let temp = this.props.chunkListMO.head;
 
     while (temp !== null) {
       listItems.push(
         <div key={temp.index} onClick={this.chunkHandler.bind(this, temp.index, temp.data)}>
-          <Chunk title={temp.index + ". " + temp.data.title}></Chunk>
+          <Chunk title={(temp.isUpdated === false ? "o - " : "x - ") + temp.index + ". " + temp.data.title}></Chunk>
         </div>
       );
       temp = temp.next;
@@ -59,12 +77,12 @@ class ChunkList extends React.Component<AppProps, AppState> {
 const mapDispatchToProps = dispatch => ({
   setChunkDetailsMO: chunkDetailsMO => {
     dispatch({
-      type: types.SET_CHUNK,
+      type: types.SET_CHUNK_DETAILS,
       chunkDetailsMO: chunkDetailsMO
     });
   }
 });
 
-const mapStateToProps = ({ chunkDetailsMO }) => ({ chunkDetailsMO });
+const mapStateToProps = ({ chunkDetailsMO, chunkListMO }) => ({ chunkDetailsMO, chunkListMO });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChunkList);

@@ -5,7 +5,7 @@ export class ChunkDetailsMO {
   public data: ChunkDataMO;
   public index: number;
 
-  constructor(isShow: boolean = false, data: ChunkDataMO = new ChunkDataMO(), index: number = 0) {
+  constructor(index: number = 0, isShow: boolean = false, data: ChunkDataMO = new ChunkDataMO()) {
     this.index = index;
     this.isShow = isShow;
     this.data = data;
