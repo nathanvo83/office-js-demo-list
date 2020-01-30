@@ -4,13 +4,16 @@ import { types } from "../../constants/types";
 import { ChunkListMO } from "../../models/ChunkListMO";
 import Chunk from "../Chunk/Chunk";
 import { ChunkDetailsMO } from "../../models/ChunkDetailsMO";
-import { ChunkDataMO } from "../../models/ChunkDataMO";
+import { WordTypeScoreMO } from "../../models/WordTypeScoreMO";
+import { ChunkNodeMO } from "../../models/ChunkNodeMO";
 
 export interface AppProps {
   chunkDetailsMO: ChunkDetailsMO;
   setChunkDetailsMO;
   chunkListMO: ChunkListMO;
   // setChunkListMO;
+  wordTypeScoreMO: WordTypeScoreMO;
+  setWordTypeScoreMO;
 }
 
 export interface AppState {
@@ -36,15 +39,16 @@ class ChunkList extends React.Component<AppProps, AppState> {
     });
   };
 
-  chunkHandler = (index: number, chunkDataMO: ChunkDataMO) => {
-    this.moveCursor(chunkDataMO.content);
+  chunkHandler = (chunkNodeMO: ChunkNodeMO) => {
+    this.moveCursor(chunkNodeMO.data.content);
 
-    const { setChunkDetailsMO, chunkDetailsMO } = this.props;
+    const { setChunkDetailsMO, chunkDetailsMO, setWordTypeScoreMO } = this.props;
     chunkDetailsMO.isShow = true;
-    chunkDetailsMO.data = chunkDataMO;
-    chunkDetailsMO.index = index;
+    chunkDetailsMO.data = chunkNodeMO.data;
+    chunkDetailsMO.index = chunkNodeMO.index;
 
     setChunkDetailsMO(chunkDetailsMO);
+    setWordTypeScoreMO(chunkNodeMO.data.wordTypeScore);
   };
 
   renderChunk() {
@@ -54,7 +58,7 @@ class ChunkList extends React.Component<AppProps, AppState> {
 
     while (temp !== null) {
       listItems.push(
-        <div key={temp.index} onClick={this.chunkHandler.bind(this, temp.index, temp.data)}>
+        <div key={temp.index} onClick={this.chunkHandler.bind(this, temp)}>
           <Chunk title={(temp.isUpdated === false ? "o - " : "x - ") + temp.index + ". " + temp.data.title}></Chunk>
         </div>
       );
@@ -74,9 +78,19 @@ const mapDispatchToProps = dispatch => ({
       type: types.SET_CHUNK_DETAILS,
       chunkDetailsMO: chunkDetailsMO
     });
+  },
+  setWordTypeScoreMO: wordTypeScoreMO => {
+    dispatch({
+      type: types.SET_SCORE,
+      wordTypeScoreMO: wordTypeScoreMO
+    });
   }
 });
 
-const mapStateToProps = ({ chunkDetailsMO, chunkListMO }) => ({ chunkDetailsMO, chunkListMO });
+const mapStateToProps = ({ chunkDetailsMO, chunkListMO, wordTypeScoreMO }) => ({
+  chunkDetailsMO,
+  chunkListMO,
+  wordTypeScoreMO
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChunkList);

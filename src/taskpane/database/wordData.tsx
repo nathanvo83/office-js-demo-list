@@ -6,8 +6,8 @@ export const wordData = {
     "'re"
   ],
   verbTokenMatch: ["am", "is", "are", "was", "were", "be", "been"],
-   // nouns
-   nounTokenRegex : [
+  // nouns
+  nounTokenRegex: [
     "ion",
     "ions",
     "ism",
@@ -23,7 +23,7 @@ export const wordData = {
     "ences"
   ],
 
-  nounExceptionMatch : [
+  nounExceptionMatch: [
     "prism",
     "city",
     "audience",
@@ -41,23 +41,9 @@ export const wordData = {
   ],
 
   // adj/adv
-  adjTokenRegex : [
-    "ly",
-    "al",
-    "ent",
-    "ive",
-    "ous",
-    "ful",
-    "less",
-    "ant",
-    "ible",
-    "able",
-    "ic",
-    "ary",
-    "ac"
-  ],
+  adjTokenRegex: ["ly", "al", "ent", "ive", "ous", "ful", "less", "ant", "ible", "able", "ic", "ary", "ac"],
 
-  adjectiveAdverbExceptionMatch : [
+  adjectiveAdverbExceptionMatch: [
     /*
           'agent',
           'ant',
@@ -144,7 +130,7 @@ export const wordData = {
   ],
 
   // TODO: preposition check should exclude 'to' infinitives and compound prepositions
-  prepositionTokenMatch : [
+  prepositionTokenMatch: [
     "about",
     "above",
     "across",
@@ -195,7 +181,7 @@ export const wordData = {
   ],
 
   // waste
-  wasteWordTokenMatch : ["it", "this", "that", "there"],
+  wasteWordTokenMatch: ["it", "this", "that", "there"]
 };
 
 // export class WordData {

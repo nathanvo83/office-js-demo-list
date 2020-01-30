@@ -723,6 +723,31 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@fortawesome/fontawesome-common-types@^0.2.26":
+  version "0.2.26"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.26.tgz#6e0b13a752676036f8196f8a1500d53a27b4adc1"
+  integrity sha512-CcM/fIFwZlRdiWG/25xE/wHbtyUuCtqoCTrr6BsWw7hH072fR++n4L56KPydAr3ANgMJMjT8v83ZFIsDc7kE+A==
+
+"@fortawesome/fontawesome-svg-core@^1.2.26":
+  version "1.2.26"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.26.tgz#671569271d6b532cdea5e3deb8ff16f8b7ac251d"
+  integrity sha512-3Dfd/v2IztP1TxKOxZiB5+4kaOZK9mNy0KU1vVK7nFlPWz3gzxrCWB+AloQhQUoJ8HhGqbzjliK89Vl7PExGbw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.26"
+
+"@fortawesome/free-regular-svg-icons@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-5.12.0.tgz#9b7ed5dbd7581aab47960802cc116fdc8b6c8b7d"
+  integrity sha512-FAvpmylTs0PosHwHrWPQX6/7ODc9M11kCE6AOAujFufDYzqTj2cPHT4yJO7zTEkKdAbbusJzbWpnOboMuyjeQA==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.26"
+
+"@fortawesome/react-fontawesome@fortawesome/react-fontawesome":
+  version "0.1.8"
+  resolved "https://codeload.github.com/fortawesome/react-fontawesome/tar.gz/0406a6a0a68e0b2d66c55d674a6d144904a80532"
+  dependencies:
+    prop-types "^15.7.2"
+
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.36"
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.10.36.tgz#aa087f1094d1f42b3672878f5c41806421478115"

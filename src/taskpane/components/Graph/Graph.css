@@ -1,0 +1,150 @@
+.graph-container { 
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    background-color: #f3f3ee;
+    position: relative;
+}
+
+.graph-part {
+    flex: 1;
+    position: relative;
+    z-index: 99;
+}
+
+.graph-part--active {
+    z-index: 199;
+}
+
+.graph-part-label {
+    position: absolute;
+    left: 28px;
+    z-index: 9000;
+    user-select: none;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.graph-part-bar {
+    height: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 0;
+    position: absolute;
+    opacity: 0.8;
+    transition: width 2s;
+    cursor:pointer;
+    max-width: 100%;
+}
+
+.graph-part-sections {
+    display: flex;
+    flex-direction: row;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.graph-part-lines {
+    z-index: 3;
+}
+
+.graph-part-section-slice {
+    flex: 1;
+    /*background: repeating-linear-gradient(
+        -55deg,
+        #222,
+        #222 10px,
+        #f3f3ee 10px,
+        #f3f3ee 20px
+    );*/
+    background-image: url(/writers-diet-plugin/assets/graph_bg.png);
+    background-attachment: fixed;
+}
+
+.graph-part-section-line {
+    flex: 1;
+    border-right: 1px solid #a5a6a9;
+}
+
+.graph-part-section-slice--1 {
+    opacity: 0;
+}
+
+.graph-part-section-slice--2 {
+    opacity: 0;
+}
+
+.graph-part-section-slice--3 {
+    opacity: 0.08;
+}
+
+.graph-part-section-slice--4 {
+    opacity: 0.12;
+}
+
+.graph-part-section-slice--5 {
+    opacity: 0.16;
+}
+
+
+.graph-part-bar--down {
+    animation: scale-down-center 0.3s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+
+.graph-part-bar--active {
+    //transform: scale(1.4, 1.4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    animation: scale-up-center 0.3s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+    z-index: 100;
+    opacity: 1;
+}
+
+@keyframes scale-up-center {
+    0% {
+      transform: scaleY(1);
+    }
+    100% {
+      transform: scaleY(1.3);
+    }
+}
+
+@keyframes scale-down-center {
+    0% {
+      transform: scaleY(1.3);
+    }
+    100% {
+      transform: scaleY(1);
+    }
+ }
+
+.graph-part.graph-part-emojis {
+    width: 100%;
+    display: flex;
+}
+
+.graph-part .ms-Checkbox {
+    position: absolute;
+    z-index: 9000;
+    pointer-events: none;
+    top: 2px;
+    left: 2px;
+}
+
+.graph-part:hover .ms-Checkbox-checkmark {
+    color: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+}
+.graph-part:hover .is-checked .ms-Checkbox-checkmark {
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+}
+
+.graph-part .ms-Checkbox-checkmark {
+    font-size: 10px;
+}
+
+.graph-part .ms-Checkbox-checkbox {
+    height: 16px;
+    width: 16px;
+}

@@ -10,6 +10,8 @@ import { ChunkDetailsMO } from "../models/ChunkDetailsMO";
 import ChunkDetails from "./ChunkDetails/ChunkDetails";
 import { ChunkNodeMO } from "../models/ChunkNodeMO";
 import { Timer } from "../Utils/Timer";
+import Graph from "./Graph/Graph";
+import { WordTypeScoreMO } from "../models/WordTypeScoreMO";
 
 export interface AppProps {
   title: string;
@@ -21,6 +23,9 @@ export interface AppProps {
 
   chunkListMO: ChunkListMO;
   setChunkListMO;
+
+  wordTypeScoreMO: WordTypeScoreMO;
+  setWordTypeScoreMO;
 }
 
 export interface AppState {
@@ -107,6 +112,7 @@ class App extends React.Component<AppProps, AppState> {
   processWordCountOnly = async () => {
     this.setLoading();
     await this.countWordChunkList();
+
     this.setCompleted();
   };
 
@@ -138,21 +144,25 @@ class App extends React.Component<AppProps, AppState> {
     const { chunkListMO, setChunkListMO, chunkDetailsMO } = this.props;
     let idx = chunkDetailsMO.index;
     this.analysis.calculator(chunkListMO, idx, idx);
+    // setWordTypeScoreMO(temp);
     setChunkListMO(chunkListMO);
   };
 
   countWordChunkList = async () => {
-    const { chunkListMO, setChunkListMO } = this.props;
+    const { chunkListMO, setChunkListMO, setWordTypeScoreMO } = this.props;
     let x = 10;
 
     let max = Math.ceil(chunkListMO.length / x);
     chunkListMO.wordTypeCount.reset();
+    chunkListMO.wordTypeScore.reset();
 
     for (let i = 0; i < max; i++) {
-      await Timer.sleep(120);
-      this.analysis.calculator(chunkListMO, i * x, (i + 1) * x);
+      await Timer.sleep(100);
+      let temp = this.analysis.calculator(chunkListMO, i * x, (i + 1) * x);
+      setWordTypeScoreMO(temp);
+
       setChunkListMO(chunkListMO);
-      this.setState({ statusInfo: `(${(i + 1) * x}/${chunkListMO.length})` });
+      this.setState({ statusInfo: `(${Math.min((i + 1) * x, chunkListMO.length)}/${chunkListMO.length})` });
     }
   };
 
@@ -200,10 +210,18 @@ class App extends React.Component<AppProps, AppState> {
     const { chunkListMO } = this.props;
     return (
       <div>
+        <div>wc: {chunkListMO.contentWordCount}</div>
         <div>noun: {chunkListMO.wordTypeCount.noun}</div>
         <div>verb: {chunkListMO.wordTypeCount.verb}</div>
         <div>prep: {chunkListMO.wordTypeCount.prep}</div>
         <div>waste: {chunkListMO.wordTypeCount.waste}</div>
+        <div>ad_: {chunkListMO.wordTypeCount.ad_}</div>
+        <div>---Score---</div>
+        <div>noun: {chunkListMO.wordTypeScore.nounScore}</div>
+        <div>verb: {chunkListMO.wordTypeScore.verbScore}</div>
+        <div>prep: {chunkListMO.wordTypeScore.prepScore}</div>
+        <div>waste: {chunkListMO.wordTypeScore.wasteScore}</div>
+        <div>ad_: {chunkListMO.wordTypeScore.ad_Score}</div>
         <ChunkList></ChunkList>
       </div>
     );
@@ -215,10 +233,19 @@ class App extends React.Component<AppProps, AppState> {
 
     return (
       <div>
+        <div>wc: {chunkDetailsMO.data.contentWordCount}</div>
         <div>noun: {chunkDetailsMO.data.wordTypeCount.noun}</div>
         <div>verb: {chunkDetailsMO.data.wordTypeCount.verb}</div>
         <div>prep: {chunkDetailsMO.data.wordTypeCount.prep}</div>
         <div>waste: {chunkDetailsMO.data.wordTypeCount.waste}</div>
+        <div>ad_: {chunkDetailsMO.data.wordTypeCount.ad_}</div>
+        <div>---Score---</div>
+        <div>noun: {chunkDetailsMO.data.wordTypeScore.nounScore}</div>
+        <div>verb: {chunkDetailsMO.data.wordTypeScore.verbScore}</div>
+        <div>prep: {chunkDetailsMO.data.wordTypeScore.prepScore}</div>
+        <div>waste: {chunkDetailsMO.data.wordTypeScore.wasteScore}</div>
+        <div>ad_: {chunkDetailsMO.data.wordTypeScore.ad_Score}</div>
+
         <ChunkDetails></ChunkDetails>
       </div>
     );
@@ -255,6 +282,9 @@ class App extends React.Component<AppProps, AppState> {
         >
           Count
         </Button>
+        <hr />
+        <Graph></Graph>
+        <hr />
         {chunkDetailsMO.isShow === false ? this.renderMaster() : this.renderDetails()}
       </div>
     );
@@ -273,9 +303,19 @@ const mapDispatchToProps = dispatch => ({
       type: types.SET_CHUNK_LIST,
       chunkListMO: chunkListMO
     });
+  },
+  setWordTypeScoreMO: wordTypeScoreMO => {
+    dispatch({
+      type: types.SET_SCORE,
+      wordTypeScoreMO: wordTypeScoreMO
+    });
   }
 });
 
-const mapStateToProps = ({ chunkDetailsMO, chunkListMO }) => ({ chunkDetailsMO, chunkListMO });
+const mapStateToProps = ({ chunkDetailsMO, chunkListMO, wordTypeScoreMO }) => ({
+  chunkDetailsMO,
+  chunkListMO,
+  wordTypeScoreMO
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
