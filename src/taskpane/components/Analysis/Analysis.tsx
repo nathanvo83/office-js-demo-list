@@ -267,7 +267,7 @@ export class Analysis {
 
     chunkListMO.wordTypeScore = this.calculateChunkListScores(chunkListMO);
 
-    return chunkListMO.wordTypeScore;
+    return chunkListMO;
   }
 
   public split(doc: string) {

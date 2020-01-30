@@ -51,6 +51,7 @@ class App extends React.Component<AppProps, AppState> {
       statusInfo: "(0/0)"
     });
 
+    setTimeout(this.process, 0);
     this.subcribeToEvent();
   }
 
@@ -112,7 +113,6 @@ class App extends React.Component<AppProps, AppState> {
   processWordCountOnly = async () => {
     this.setLoading();
     await this.countWordChunkList();
-
     this.setCompleted();
   };
 
@@ -141,11 +141,11 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   countWordChunkDetails = async () => {
-    const { chunkListMO, setChunkListMO, chunkDetailsMO } = this.props;
+    const { chunkListMO, setChunkListMO, chunkDetailsMO, setWordTypeScoreMO } = this.props;
     let idx = chunkDetailsMO.index;
-    this.analysis.calculator(chunkListMO, idx, idx);
-    // setWordTypeScoreMO(temp);
-    setChunkListMO(chunkListMO);
+    let temp = this.analysis.calculator(chunkListMO, idx, idx);
+    setWordTypeScoreMO(temp.wordTypeScore);
+    setChunkListMO(temp);
   };
 
   countWordChunkList = async () => {
@@ -156,14 +156,23 @@ class App extends React.Component<AppProps, AppState> {
     chunkListMO.wordTypeCount.reset();
     chunkListMO.wordTypeScore.reset();
 
+    // setWordTypeScoreMO(new WordTypeScoreMO());
+    // Timer.sleep(500);
+
+    let temp: ChunkListMO = new ChunkListMO();
     for (let i = 0; i < max; i++) {
       await Timer.sleep(100);
-      let temp = this.analysis.calculator(chunkListMO, i * x, (i + 1) * x);
-      setWordTypeScoreMO(temp);
+      temp = this.analysis.calculator(chunkListMO, i * x, (i + 1) * x);
+      // setWordTypeScoreMO(temp.wordTypeScore, async () => {
+      //   await Timer.sleep(100);
+      //   setChunkListMO(temp);
+      // });
 
-      setChunkListMO(chunkListMO);
+      setChunkListMO(temp);
       this.setState({ statusInfo: `(${Math.min((i + 1) * x, chunkListMO.length)}/${chunkListMO.length})` });
     }
+
+    setWordTypeScoreMO(temp.wordTypeScore);
   };
 
   lastKeyPressChecking = async () => {
@@ -207,10 +216,10 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   renderMaster() {
-    const { chunkListMO } = this.props;
+    // const { chunkListMO } = this.props;
     return (
       <div>
-        <div>wc: {chunkListMO.contentWordCount}</div>
+        {/* <div>wc: {chunkListMO.contentWordCount}</div>
         <div>noun: {chunkListMO.wordTypeCount.noun}</div>
         <div>verb: {chunkListMO.wordTypeCount.verb}</div>
         <div>prep: {chunkListMO.wordTypeCount.prep}</div>
@@ -221,7 +230,7 @@ class App extends React.Component<AppProps, AppState> {
         <div>verb: {chunkListMO.wordTypeScore.verbScore}</div>
         <div>prep: {chunkListMO.wordTypeScore.prepScore}</div>
         <div>waste: {chunkListMO.wordTypeScore.wasteScore}</div>
-        <div>ad_: {chunkListMO.wordTypeScore.ad_Score}</div>
+        <div>ad_: {chunkListMO.wordTypeScore.ad_Score}</div> */}
         <ChunkList></ChunkList>
       </div>
     );
@@ -229,11 +238,11 @@ class App extends React.Component<AppProps, AppState> {
 
   renderDetails() {
     //
-    const { chunkDetailsMO } = this.props;
+    // const { chunkDetailsMO } = this.props;
 
     return (
       <div>
-        <div>wc: {chunkDetailsMO.data.contentWordCount}</div>
+        {/* <div>wc: {chunkDetailsMO.data.contentWordCount}</div>
         <div>noun: {chunkDetailsMO.data.wordTypeCount.noun}</div>
         <div>verb: {chunkDetailsMO.data.wordTypeCount.verb}</div>
         <div>prep: {chunkDetailsMO.data.wordTypeCount.prep}</div>
@@ -244,7 +253,7 @@ class App extends React.Component<AppProps, AppState> {
         <div>verb: {chunkDetailsMO.data.wordTypeScore.verbScore}</div>
         <div>prep: {chunkDetailsMO.data.wordTypeScore.prepScore}</div>
         <div>waste: {chunkDetailsMO.data.wordTypeScore.wasteScore}</div>
-        <div>ad_: {chunkDetailsMO.data.wordTypeScore.ad_Score}</div>
+        <div>ad_: {chunkDetailsMO.data.wordTypeScore.ad_Score}</div> */}
 
         <ChunkDetails></ChunkDetails>
       </div>

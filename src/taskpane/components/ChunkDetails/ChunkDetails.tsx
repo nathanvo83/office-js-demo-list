@@ -8,6 +8,8 @@ export interface AppProps {
   //
   chunkDetailsMO: ChunkDetailsMO;
   setChunkDetailsMO;
+  setWordTypeScoreMO;
+  chunkListMO;
 }
 
 export interface AppState {
@@ -22,11 +24,12 @@ class ChunkDetails extends React.Component<AppProps, AppState> {
     //
   }
   chunkHandler = () => {
-    const { chunkDetailsMO, setChunkDetailsMO } = this.props;
+    const { chunkDetailsMO, setChunkDetailsMO, setWordTypeScoreMO, chunkListMO } = this.props;
 
     chunkDetailsMO.isShow = false;
 
     setChunkDetailsMO(chunkDetailsMO);
+    setWordTypeScoreMO(chunkListMO.wordTypeScore);
   };
 
   renderContent = (content: string) => {
@@ -48,6 +51,10 @@ class ChunkDetails extends React.Component<AppProps, AppState> {
   };
 
   render() {
+    // const { setWordTypeScoreMO, chunkDetailsMO } = this.props;
+
+    // setWordTypeScoreMO(chunkDetailsMO.data.wordTypeScore);
+
     return (
       <>
         <hr></hr>
@@ -66,9 +73,15 @@ const mapDispatchToProps = dispatch => ({
       type: types.SET_CHUNK_DETAILS,
       chunkDetailsMO: chunkDetailsMO
     });
+  },
+  setWordTypeScoreMO: wordTypeScoreMO => {
+    dispatch({
+      type: types.SET_SCORE,
+      wordTypeScoreMO: wordTypeScoreMO
+    });
   }
 });
 
-const mapStateToProps = ({ chunkDetailsMO }) => ({ chunkDetailsMO });
+const mapStateToProps = ({ chunkDetailsMO, chunkListMO }) => ({ chunkDetailsMO, chunkListMO });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChunkDetails);
