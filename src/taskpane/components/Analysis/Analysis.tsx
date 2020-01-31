@@ -50,6 +50,105 @@ export class Analysis {
     return false;
   }
 
+  private identifVerbs(word: string) {
+    let result: boolean = false;
+    // verbs
+    wordData.verbTokenRegex.forEach(verb => {
+      if (word.endsWith(verb) === true) {
+        result = true;
+      }
+    });
+    wordData.verbTokenMatch.forEach(verb => {
+      if (word === verb) {
+        result = true;
+      }
+    });
+
+    return result;
+  }
+
+  private identifyNouns(word: string) {
+    let result: boolean = false;
+    // nouns
+    wordData.nounTokenRegex.forEach(noun => {
+      if (word.endsWith(noun) === true) {
+        result = true;
+      }
+    });
+    wordData.nounExceptionMatch.forEach(noun => {
+      if (word === noun) {
+        result = true;
+      }
+    });
+
+    return result;
+  }
+
+  private identifyPrepositions(word: string) {
+    let result: boolean = false;
+    // prepositions
+    wordData.prepositionTokenMatch.forEach(prep => {
+      if (word === prep) {
+        result = true;
+      }
+    });
+
+    return result;
+  }
+
+  private identifyAd_s(word: string) {
+    let result: boolean = false;
+    // ad_
+    wordData.adjTokenRegex.forEach(prep => {
+      if (word.endsWith(prep) === true) {
+        result = true;
+      }
+    });
+
+    wordData.adjectiveAdverbExceptionMatch.forEach(prep => {
+      if (word === prep) {
+        result = true;
+      }
+    });
+    return result;
+  }
+
+  private identifyWastes(word: string) {
+    let result: boolean = false;
+    // waste
+
+    wordData.wasteWordTokenMatch.forEach(waste => {
+      if (word.includes(waste)) {
+        result = true;
+      }
+      // if (word === waste) {
+      //   result = true;
+      // }
+    });
+    return result;
+  }
+
+  // -1: normal
+  // 0: verbs
+  // 1:nouns
+  // 2:prepositions
+  // 3:ad_s
+  // 4:waste
+  public identifyWord(word: string) {
+    if (this.identifVerbs(word) === true) {
+      return 0;
+    } else if (this.identifyNouns(word) === true) {
+      return 1;
+    } else if (this.identifyPrepositions(word) === true) {
+      return 2;
+    } else if (this.identifyAd_s(word) === true) {
+      return 3;
+    } else if (this.identifyWastes(word) === true) {
+      return 4;
+    }
+    return -1;
+  }
+
   private calculateWord(content: string) {
     let _verb = 0;
     let _waste = 0;
@@ -65,56 +164,26 @@ export class Analysis {
 
           wc++;
 
-          // verbs
-          wordData.verbTokenRegex.forEach(verb => {
-            if (term.endsWith(verb) === true) {
-              _verb += 1;
-            }
-          });
-          wordData.verbTokenMatch.forEach(verb => {
-            if (term === verb) {
-              _verb += 1;
-            }
-          });
+          switch (this.identifyWord(term)) {
+            case 0:
+              _verb++;
+              break;
+            case 1:
+              _noun++;
+              break;
+            case 2:
+              _prep++;
+              break;
+            case 3:
+              _ad_++;
+              break;
+            case 4:
+              _waste++;
+              break;
 
-          // nouns
-          wordData.nounTokenRegex.forEach(noun => {
-            if (term.endsWith(noun) === true) {
-              _noun += 1;
-            }
-          });
-          wordData.nounExceptionMatch.forEach(noun => {
-            if (term === noun) {
-              _noun += 1;
-            }
-          });
-
-          // adj
-          wordData.adjTokenRegex.forEach(prep => {
-            if (term.endsWith(prep) === true) {
-              _ad_ += 1;
-            }
-          });
-
-          wordData.adjectiveAdverbExceptionMatch.forEach(prep => {
-            if (term === prep) {
-              _ad_ += 1;
-            }
-          });
-
-          // prep
-          wordData.prepositionTokenMatch.forEach(prep => {
-            if (term === prep) {
-              _prep += 1;
-            }
-          });
-
-          // waste
-          wordData.wasteWordTokenMatch.forEach(waste => {
-            if (term === waste) {
-              _waste += 1;
-            }
-          });
+            default:
+              break;
+          }
         }
       });
     }
@@ -125,7 +194,83 @@ export class Analysis {
     return { wtc, wc };
   }
 
+  // private calculateWord(content: string) {
+  //   let _verb = 0;
+  //   let _waste = 0;
+  //   let _noun = 0;
+  //   let _prep = 0;
+  //   let _ad_ = 0;
+  //   let wc = 0;
+
+  //   if (content) {
+  //     content.split(" ").forEach(word => {
+  //       if (word.trim().length > 0) {
+  //         let term = word.toLowerCase();
+
+  //         wc++;
+
+  //         // verbs
+  //         wordData.verbTokenRegex.forEach(verb => {
+  //           if (term.endsWith(verb) === true) {
+  //             _verb += 1;
+  //           }
+  //         });
+  //         wordData.verbTokenMatch.forEach(verb => {
+  //           if (term === verb) {
+  //             _verb += 1;
+  //           }
+  //         });
+
+  //         // nouns
+  //         wordData.nounTokenRegex.forEach(noun => {
+  //           if (term.endsWith(noun) === true) {
+  //             _noun += 1;
+  //           }
+  //         });
+  //         wordData.nounExceptionMatch.forEach(noun => {
+  //           if (term === noun) {
+  //             _noun += 1;
+  //           }
+  //         });
+
+  //         // adj
+  //         wordData.adjTokenRegex.forEach(prep => {
+  //           if (term.endsWith(prep) === true) {
+  //             _ad_ += 1;
+  //           }
+  //         });
+
+  //         wordData.adjectiveAdverbExceptionMatch.forEach(prep => {
+  //           if (term === prep) {
+  //             _ad_ += 1;
+  //           }
+  //         });
+
+  //         // prep
+  //         wordData.prepositionTokenMatch.forEach(prep => {
+  //           if (term === prep) {
+  //             _prep += 1;
+  //           }
+  //         });
+
+  //         // waste
+  //         wordData.wasteWordTokenMatch.forEach(waste => {
+  //           if (term === waste) {
+  //             _waste += 1;
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
+
+  //   let wtc = new WordTypeCountMO(_verb, _noun, _prep, _waste, _ad_);
+  //   wc--;
+
+  //   return { wtc, wc };
+  // }
+
   // scoreCalculator = (metric: Metrics, count: number, wc: number) => {
+
   private calculateScore(count: number, wordCount: number, scoreCutoffs: number[]) {
     // const { metrics } = this._config;
     // const { scoreCutoffs } = metrics[+metric];

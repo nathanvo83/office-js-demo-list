@@ -1,0 +1,41 @@
+@font-face {
+  font-family: Pitch;
+  src: url(/writers-diet-plugin/assets/Pitch-Regular.otf);
+}
+
+.wd-themed-header {
+  font-family: Pitch, "Courier New", Courier, monospace;
+  font-weight: 100;
+  font-size: 1.3em;
+  margin-top: 12px;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.build-number {
+  margin-top: 2em;
+  text-align: center;
+}
+
+.info-pane-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.info-pane-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.info-pane-rest {
+  display: flex;
+  flex-direction: column;
+}
+
+.ms-Panel-content {
+  height: 100% !important;
+}

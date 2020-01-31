@@ -1,0 +1,46 @@
+.chunk-details-content {
+  /*  */
+  /* padding-top: 10px;
+  padding-bottom: 10px; */
+  line-height: 170%;
+  padding: 10px;
+  background-color: #f3f3ee;
+}
+
+.normal {
+  padding: 2px 0px;
+}
+
+.verb {
+  /*  */
+  background-color: #dc8749;
+  padding: 2px 0px;
+  cursor: pointer;
+}
+
+.noun {
+  background-color: #97c6e9;
+  padding: 2px 0px;
+  cursor: pointer;
+}
+
+.preposition {
+  /*  */
+  background-color: #aac044;
+  padding: 2px 0px;
+  cursor: pointer;
+}
+
+.ad_ {
+  /*  */
+  background-color: #f7e73f;
+  padding: 2px 0px;
+  cursor: pointer;
+}
+
+.waste {
+  /*  */
+  background-color: #e6b5c4;
+  padding: 2px 0px;
+  cursor: pointer;
+}

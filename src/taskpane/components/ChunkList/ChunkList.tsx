@@ -68,7 +68,7 @@ class ChunkList extends React.Component<AppProps, AppState> {
   }
 
   render() {
-    return <>{this.renderChunk()}</>;
+    return <div>{this.renderChunk()}</div>;
   }
 }
 

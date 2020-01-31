@@ -12,6 +12,7 @@ export interface AppState {
   //
   start: boolean;
   down: boolean;
+  active: boolean;
 }
 
 export default class GraphPart extends React.Component<AppProps, AppState> {
@@ -19,21 +20,30 @@ export default class GraphPart extends React.Component<AppProps, AppState> {
     super(props);
     this.state = {
       start: true,
-      down: false
+      down: false,
+      active: false
     };
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     setTimeout(() => {
       this.setState({ ...this.state, start: false });
     }, 0);
   }
 
-  public render() {
+  checkBoxHandler() {
+    console.log("check change....");
+    this.setState({ ...this.state, active: !this.state.active });
+  }
+
+  render() {
     // const { label, color, score, foo, activeMetric, setActiveMetric, metricKey } = this.props;
     const { label, color, score } = this.props;
     const { start, down } = this.state;
     // const active = metricKey === activeMetric;
+    // function _onChange(ev: React.FormEvent<HTMLElement>, isChecked: boolean) {
+    //   console.log(`The option has been changed to ${isChecked}. ${ev}`);
+    // }
 
     const pct = (score / 5) * 100;
 
@@ -53,7 +63,7 @@ export default class GraphPart extends React.Component<AppProps, AppState> {
 
     return (
       <div
-        className={`graph-part`}
+        className={`graph-part graph-part--active`}
         // className={`graph-part ${active ? "graph-part--active" : ""}`}
         // onClick={() => {
         //   setActiveMetric(active ? 0 : metricKey);

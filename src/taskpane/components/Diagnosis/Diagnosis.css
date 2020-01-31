@@ -1,0 +1,43 @@
+.diagnosis-container {
+    //background-color: rgb(109, 109, 111);
+    user-select: none;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .2);
+    padding: 8px;
+    position: relative;
+    flex: none;
+/*    max-height: 44px; */
+}
+
+.diagnosis-container-top {
+    display: flex;
+}
+
+.diagnosis-container-footer {
+    margin-left: 8px;
+}
+
+.diagnosis-caption {
+    padding: 4px 0em;
+}
+
+.diagnosis-header {
+    flex: 1;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.8em !important;
+    transition: all .5s;
+    line-height: 28px;
+    margin-left: 8px;
+}
+
+
+.diagnosis-icon-container {
+    /*flex: 0;*/
+}
+
+.diagnosis-icon {
+    height: .8em;
+    margin-right: 8px;
+    display: inline;
+    z-index: 0;
+}

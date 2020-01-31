@@ -1,6 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Button, ButtonType } from "office-ui-fabric-react";
+// import "./App.css";
+// import { Button, ButtonType } from "office-ui-fabric-react";
 import Progress from "./Progress";
 import { Analysis } from "./Analysis/Analysis";
 import { ChunkListMO } from "../models/ChunkListMO";
@@ -12,6 +13,11 @@ import { ChunkNodeMO } from "../models/ChunkNodeMO";
 import { Timer } from "../Utils/Timer";
 import Graph from "./Graph/Graph";
 import { WordTypeScoreMO } from "../models/WordTypeScoreMO";
+import WdCommandBar from "./WdCommandBar/WdCommandBar";
+import InfoPane from "./InfoPane/InfoPane";
+import FirstRun from "./FirstRun/FirstRun";
+import Diagnosis from "./Diagnosis/Diagnosis";
+// import { Checkbox } from "office-ui-fabric-react";
 
 export interface AppProps {
   title: string;
@@ -26,6 +32,10 @@ export interface AppProps {
 
   wordTypeScoreMO: WordTypeScoreMO;
   setWordTypeScoreMO;
+
+  isShowFirstRun: boolean;
+  isShowInfoPane: boolean;
+  isShowIntro: boolean;
 }
 
 export interface AppState {
@@ -37,12 +47,15 @@ class App extends React.Component<AppProps, AppState> {
   private analysis: Analysis;
   private keyPressTimerId;
   private chunkDetailsContentChange: boolean;
+  private isProcessing: boolean;
+  private isNextProcessing: boolean;
 
   constructor(props, context) {
     super(props, context);
     this.analysis = new Analysis();
     this.chunkDetailsContentChange = false;
-    // this.shouldReload = false;
+    this.isProcessing = false;
+    this.isNextProcessing = false;
   }
 
   componentDidMount() {
@@ -97,16 +110,19 @@ class App extends React.Component<AppProps, AppState> {
 
   setCompleted = () => {
     this.setState({ isLoad: false }, () => {
-      // this.showTime("completed");
-      // this.flagRuning = false;
-      // this.subcribeToEvent();
+      this.isProcessing = false;
+
+      // finish but if isNextProcessing is set => process once again.
+      if (this.isNextProcessing === true) {
+        Timer.sleep(1000);
+        this.process();
+      }
     });
   };
 
   setLoading = () => {
     this.setState({ isLoad: true }, () => {
-      // this.flagRuning = true;
-      // this.showTime("loading");
+      //
     });
   };
 
@@ -117,6 +133,10 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   process = () => {
+    // set isProcessing and clear isNextProcessing.
+    this.isProcessing = true;
+    this.isNextProcessing = false;
+
     const { chunkDetailsMO } = this.props;
 
     Word.run(async context => {
@@ -198,7 +218,12 @@ class App extends React.Component<AppProps, AppState> {
     });
 
     if (len1 === len2) {
-      this.process();
+      if (this.isProcessing === false) {
+        this.process();
+      } else {
+        // need to process more one time.
+        this.isNextProcessing = true;
+      }
     }
   };
 
@@ -260,8 +285,15 @@ class App extends React.Component<AppProps, AppState> {
     );
   }
 
-  render() {
-    const { title, isOfficeInitialized, chunkDetailsMO } = this.props;
+  renderAppLayout() {
+    // function _onChange(ev: React.FormEvent<HTMLElement>, isChecked: boolean) {
+    //   console.log(`The option has been changed to ${isChecked}. ${ev}`);
+    // }
+    const { title, isOfficeInitialized, chunkDetailsMO, isShowIntro } = this.props;
+    const { isShowFirstRun, isShowInfoPane } = this.props;
+    console.log("--->>> isShowFirstRun: ", isShowFirstRun);
+    console.log("--->>> isShowInfoPane: ", isShowInfoPane);
+    console.log("--->>> isShowIntro: ", isShowIntro);
 
     if (!isOfficeInitialized) {
       return (
@@ -269,34 +301,39 @@ class App extends React.Component<AppProps, AppState> {
       );
     }
 
-    console.log("-->", chunkDetailsMO.isShow);
-
     return (
       <div className="ms-welcome">
+        {this.props.isShowIntro === true ? <FirstRun></FirstRun> : ""}
+        {/* <Checkbox label="Unchecked checkbox (uncontrolled)" onChange={_onChange} /> */}
         {this.state.isLoad === false ? "completed" : "loading"} - {this.state.statusInfo}
         <br />
-        <Button
-          className="ms-welcome__action"
-          buttonType={ButtonType.hero}
-          iconProps={{ iconName: "ChevronRight" }}
-          onClick={this.process}
-        >
-          Run
-        </Button>
-        <Button
-          className="ms-welcome__action"
-          buttonType={ButtonType.hero}
-          iconProps={{ iconName: "ChevronRight" }}
-          onClick={this.countWordChunkList}
-        >
-          Count
-        </Button>
-        <hr />
+        <WdCommandBar refreshAction={this.process}></WdCommandBar>
         <Graph></Graph>
-        <hr />
+        <Diagnosis></Diagnosis>
         {chunkDetailsMO.isShow === false ? this.renderMaster() : this.renderDetails()}
+        <InfoPane></InfoPane>
       </div>
     );
+  }
+
+  renderFirstRun() {
+    return (
+      <div>
+        <FirstRun></FirstRun>
+      </div>
+    );
+  }
+
+  render() {
+    const { isShowIntro } = this.props;
+    return <div>{isShowIntro === true ? this.renderFirstRun() : this.renderAppLayout()}</div>;
+
+    // return <div>{isShowFirstRun === false ? this.renderFirstRun() : this.renderAppLayout()}</div>;
+    // return <div>{isShowFirstRun === false ? this.renderAppLayout() : this.renderFirstRun()}</div>;
+
+    // this.renderFirstRun();
+
+    // return <div>{isShowFirstRun === true ? "show" : "hide"}</div>;
   }
 }
 
@@ -321,10 +358,20 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const mapStateToProps = ({ chunkDetailsMO, chunkListMO, wordTypeScoreMO }) => ({
+const mapStateToProps = ({
   chunkDetailsMO,
   chunkListMO,
-  wordTypeScoreMO
+  wordTypeScoreMO,
+  isShowFirstRun,
+  isShowInfoPane,
+  isShowIntro
+}) => ({
+  chunkDetailsMO,
+  chunkListMO,
+  wordTypeScoreMO,
+  isShowFirstRun,
+  isShowInfoPane,
+  isShowIntro
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

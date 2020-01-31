@@ -1,6 +1,19 @@
 import * as React from "react";
 
 export const Config = {
+  base: {
+    buildNumber: require("../../../package.json").version // https://semver.org/
+    // bounds: {
+    //     'minChunkWords': {
+    //         min: 100,
+    //         max: 1000
+    //     },
+    //     'ignore.wordCountLessThan': {
+    //         min: 0,
+    //         max: 100
+    //     }
+  },
+
   metrics: {
     Overall: {
       key: "Overall",
