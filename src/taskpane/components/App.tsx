@@ -47,14 +47,14 @@ class App extends React.Component<AppProps, AppState> {
   private analysis: Analysis;
   private keyPressTimerId;
   private chunkDetailsContentChange: boolean;
-  private isProcessing: boolean;
+  // private isProcessing: boolean;
   private isNextProcessing: boolean;
 
   constructor(props, context) {
     super(props, context);
     this.analysis = new Analysis();
     this.chunkDetailsContentChange = false;
-    this.isProcessing = false;
+    // this.isProcessing = false;
     this.isNextProcessing = false;
   }
 
@@ -110,9 +110,8 @@ class App extends React.Component<AppProps, AppState> {
 
   setCompleted = () => {
     this.setState({ isLoad: false }, () => {
-      this.isProcessing = false;
-
-      // finish but if isNextProcessing is set => process once again.
+      // this.isProcessing = false;
+      // // finish but if isNextProcessing is set => process once again.
       if (this.isNextProcessing === true) {
         Timer.sleep(1000);
         this.process();
@@ -134,7 +133,7 @@ class App extends React.Component<AppProps, AppState> {
 
   process = () => {
     // set isProcessing and clear isNextProcessing.
-    this.isProcessing = true;
+    // this.isProcessing = true;
     this.isNextProcessing = false;
 
     const { chunkDetailsMO } = this.props;
@@ -196,6 +195,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   lastKeyPressChecking = async () => {
+    const { isLoad } = this.state;
     let len1: number;
     let len2: number;
 
@@ -218,12 +218,18 @@ class App extends React.Component<AppProps, AppState> {
     });
 
     if (len1 === len2) {
-      if (this.isProcessing === false) {
+      if (isLoad === false) {
         this.process();
       } else {
-        // need to process more one time.
         this.isNextProcessing = true;
       }
+
+      // if (this.isProcessing === false) {
+      //   this.process();
+      // } else {
+      //   // need to process more one time.
+      //   this.isNextProcessing = true;
+      // }
     }
   };
 

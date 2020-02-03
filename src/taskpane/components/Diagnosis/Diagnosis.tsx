@@ -18,6 +18,7 @@ export interface AppProps {
   chunkDetailsMO: ChunkDetailsMO;
   setChunkDetailsMO;
   chunkListMO: ChunkListMO;
+  setWordTypeScoreMO;
 }
 
 export interface AppState {
@@ -26,9 +27,10 @@ export interface AppState {
 
 class Diagnosis extends React.Component<AppProps, AppState> {
   closeButtonHandler = () => {
-    const { setChunkDetailsMO, chunkDetailsMO } = this.props;
+    const { setChunkDetailsMO, chunkDetailsMO, chunkListMO, setWordTypeScoreMO } = this.props;
     chunkDetailsMO.isShow = false;
     setChunkDetailsMO(chunkDetailsMO);
+    setWordTypeScoreMO(chunkListMO.wordTypeScore);
   };
 
   render() {
